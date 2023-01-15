@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubCategoryRequest {
     private String subCategoryName;
-
-    private String  categoryUuid;
+    private String productUuid;
+    private String categoryUuid;
 }

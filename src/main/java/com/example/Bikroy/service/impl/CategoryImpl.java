@@ -23,21 +23,17 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
-        CategoryModel categoryModel = new CategoryModel(categoryRequest.getCategoryName(),
-                categoryRequest.getPrice(),categoryRequest.getCondition(),categoryRequest.getBrand(),
-                categoryRequest.getModelName(),categoryRequest.getFeatures(),categoryRequest.getDescription());
+        CategoryModel categoryModel = new CategoryModel(categoryRequest.getCategoryName());
 
         categoryModel.setCreatedBy("Admin");
         categoryModel.setCreatedOn(LocalDateTime.now());
         categoryModel.setUuid(UUID.randomUUID().toString());
-        categoryModel.setLastUpdatedBy(categoryRequest.getLastUpdatedBy());
+//        categoryModel.setLastUpdatedBy(categoryRequest.getLastUpdatedBy());
 
         categoryModel = categoryRepository.save(categoryModel);
 
         CategoryResponse categoryResponse =
-                new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                        categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                        categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
 
         return categoryResponse;
     }
@@ -50,9 +46,7 @@ public class CategoryImpl implements CategoryService {
 
         for (CategoryModel categoryModel: categoryModels) {
             CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                            categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                            categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
             categoryResponses.add(categoryResponse);
         }
 
@@ -70,9 +64,7 @@ public class CategoryImpl implements CategoryService {
 
             categoryModel = categoryRepository.save(categoryModel);
 
-            return new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                    categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                    categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+            return new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with uuid: " + uuid + " is not found.");
         }
@@ -100,9 +92,7 @@ public class CategoryImpl implements CategoryService {
         if(categoryModelOptional.isPresent()){
             CategoryModel categoryModel = categoryModelOptional.get();
 
-            return new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                    categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                    categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+            return new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with uuid: " + uuid + " is not found.");
         }
@@ -129,9 +119,7 @@ public class CategoryImpl implements CategoryService {
 
         for (CategoryModel categoryModel: categoryModelPage.getContent()) {
             CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                    categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                    categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
             categoryResponses.add(categoryResponse);
         }
 

@@ -13,4 +13,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "AREA")
 public class AreaAddressModel extends BaseModel {
     private String areaName;
+
+
 }

@@ -17,6 +17,9 @@ public class SubCategoryModel extends BaseModel {
     private String subCategoryName;
 
     @ManyToOne
+    private ProductModel productModel;
+
+    @ManyToOne
     private CategoryModel categoryModel;
 
 }

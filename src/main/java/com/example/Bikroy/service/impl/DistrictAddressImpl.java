@@ -48,9 +48,9 @@ public class DistrictAddressImpl implements DistrictAddressService {
 
             DistrictAddressModel districtAddressModel = new DistrictAddressModel(districtAddressRequest.getDistrictName(),
                     divisionAddressModel,areaAddressModel);
-//            districtAddressModel.setCreatedBy("Admin");
-//            districtAddressModel.setCreatedOn(LocalDateTime.now());
-//            districtAddressModel.setUuid(UUID.randomUUID().toString());
+            districtAddressModel.setCreatedBy("Admin");
+            districtAddressModel.setCreatedOn(LocalDateTime.now());
+            districtAddressModel.setUuid(UUID.randomUUID().toString());
 
             districtAddressModel = districtAddressModelRepository.save(districtAddressModel);
 

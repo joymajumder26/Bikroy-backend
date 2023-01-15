@@ -25,9 +25,9 @@ public class AreaAddressImpl implements AreaAddressService {
  @Override
  public AreaAddressResponse createArea(AreaAddressRequest areaAddressRequest){
   AreaAddressModel areaAddressModel = new AreaAddressModel(areaAddressRequest.getAreaName());
-//  areaAddressModel.setCreatedBy("Admin");
-//  areaAddressModel.setCreatedOn(LocalDateTime.now());
-//  areaAddressModel.setUuid(UUID.randomUUID().toString());
+  areaAddressModel.setCreatedBy("Admin");
+  areaAddressModel.setCreatedOn(LocalDateTime.now());
+  areaAddressModel.setUuid(UUID.randomUUID().toString());
 //  areaAddressModel.setLastUpdatedBy(categoryRequest.getLastUpdatedBy());
 
   areaAddressModel = areaAddressRepository.save(areaAddressModel);

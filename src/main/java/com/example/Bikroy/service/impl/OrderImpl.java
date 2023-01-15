@@ -49,16 +49,19 @@ public class OrderImpl implements OrderService {
             subCategoryModel = orderModel.getSubCategory();
             districtAddressModel = orderModel.getDistrictAddressModel();
             CategoryModel categoryModel = subCategoryModel.getCategoryModel();
+            ProductModel productModel = subCategoryModel.getProductModel();
             DivisionAddressModel divisionAddressModel = districtAddressModel.getDivisionAddressModel();
             AreaAddressModel areaAddressModel = districtAddressModel.getAreaAddressModel();
 
             CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                            categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                            categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
 
             SubCategoryResponse subCategoryResponse =
-                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),categoryResponse);
+                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
 
             DivisionAddressResponse divisionAddressResponse=
                     new DivisionAddressResponse(divisionAddressModel.getUuid(),divisionAddressModel.getDivisionName());
@@ -90,6 +93,7 @@ public class OrderImpl implements OrderService {
         for (OrderModel orderModel : orderModels) {
             SubCategoryModel subCategoryModel = orderModel.getSubCategory();
             CategoryModel categoryModel = new CategoryModel();
+            ProductModel productModel = new ProductModel();
             DistrictAddressModel districtAddressModel = orderModel.getDistrictAddressModel();
             DivisionAddressModel divisionAddressModel = new DivisionAddressModel();
             AreaAddressModel areaAddressModel=new AreaAddressModel();
@@ -97,6 +101,10 @@ public class OrderImpl implements OrderService {
             if (subCategoryModel.getCategoryModel()!=null){
                 categoryModel = subCategoryModel.getCategoryModel();
             }
+            if (subCategoryModel.getProductModel()!=null){
+                productModel = subCategoryModel.getProductModel();
+            }
+
 
             if (districtAddressModel.getDivisionAddressModel()!=null){
                 divisionAddressModel= districtAddressModel.getDivisionAddressModel();
@@ -106,13 +114,15 @@ public class OrderImpl implements OrderService {
                 areaAddressModel= districtAddressModel.getAreaAddressModel();
 
             }
-            CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                            categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                            categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
 
+            CategoryResponse categoryResponse =
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
             SubCategoryResponse subCategoryResponse =
-                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),categoryResponse);
+                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
 
             DivisionAddressResponse divisionAddressResponse=
                     new DivisionAddressResponse(divisionAddressModel.getUuid(),divisionAddressModel.getDivisionName());
@@ -145,18 +155,21 @@ public class OrderImpl implements OrderService {
 
             SubCategoryModel subCategoryModel = orderModel.getSubCategory();
             CategoryModel categoryModel = subCategoryModel.getCategoryModel();
+            ProductModel productModel = subCategoryModel.getProductModel();
 
             DistrictAddressModel districtAddressModel = orderModel.getDistrictAddressModel();
             DivisionAddressModel divisionAddressModel = districtAddressModel.getDivisionAddressModel();
             AreaAddressModel areaAddressModel = districtAddressModel.getAreaAddressModel();
 
             CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                            categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                            categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
 
             SubCategoryResponse subCategoryResponse =
-                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),categoryResponse);
+                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
 
             DivisionAddressResponse divisionAddressResponse=
                     new DivisionAddressResponse(divisionAddressModel.getUuid(),divisionAddressModel.getDivisionName());

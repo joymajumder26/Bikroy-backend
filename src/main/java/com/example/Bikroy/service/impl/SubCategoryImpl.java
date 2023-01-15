@@ -2,10 +2,11 @@ package com.example.Bikroy.service.impl;
 
 import com.example.Bikroy.dto.request.SubCategoryRequest;
 import com.example.Bikroy.dto.response.CategoryResponse;
+import com.example.Bikroy.dto.response.ProductResponse;
 import com.example.Bikroy.dto.response.SubCategoryResponse;
-import com.example.Bikroy.model.CategoryModel;
-import com.example.Bikroy.model.SubCategoryModel;
+import com.example.Bikroy.model.*;
 import com.example.Bikroy.repository.CategoryModelRepository;
+import com.example.Bikroy.repository.ProductRepository;
 import com.example.Bikroy.repository.SubCategoryModelRepository;
 import com.example.Bikroy.service.SubCategoryService;
 import lombok.AllArgsConstructor;
@@ -23,17 +24,22 @@ import java.util.UUID;
 public class SubCategoryImpl implements SubCategoryService {
     private final SubCategoryModelRepository subCategoryRepository;
     private final CategoryModelRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public SubCategoryResponse createSubCategory(SubCategoryRequest subCategoryRequest){
         Optional<CategoryModel> categoryModelOptional= categoryRepository.findByUuid(subCategoryRequest.getCategoryUuid());
+        Optional<ProductModel>productModelOptional = productRepository.findByUuid(subCategoryRequest.getProductUuid());
         CategoryModel categoryModel= null;
-        if (categoryModelOptional.isPresent()) {
+        ProductModel productModel = null;
+        if (categoryModelOptional.isPresent()&&productModelOptional.isPresent()) {
             categoryModel = categoryModelOptional.get();
+            productModel = productModelOptional.get();
 
         }
+
         SubCategoryModel subCategoryModel = new SubCategoryModel(subCategoryRequest.getSubCategoryName(),
-                categoryModel);
+                productModel,categoryModel);
         subCategoryModel.setCreatedBy("Admin");
         subCategoryModel.setCreatedOn(LocalDateTime.now());
         subCategoryModel.setUuid(UUID.randomUUID().toString());
@@ -41,13 +47,16 @@ public class SubCategoryImpl implements SubCategoryService {
         subCategoryModel = subCategoryRepository.save(subCategoryModel);
 
         categoryModel = subCategoryModel.getCategoryModel();
+        productModel = subCategoryModel.getProductModel();
         CategoryResponse categoryResponse =
-                new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                        categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                        categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+        ProductResponse productResponse =
+                new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                        productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                        productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
 
         SubCategoryResponse subCategoryResponse =
-                new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),categoryResponse);
+                new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
 
         return subCategoryResponse;
     }
@@ -59,12 +68,17 @@ public class SubCategoryImpl implements SubCategoryService {
 
         for (SubCategoryModel subCategoryModel : subCategoryModels) {
             CategoryModel categoryModel = subCategoryModel.getCategoryModel();
+            ProductModel productModel = subCategoryModel.getProductModel();
             CategoryResponse categoryResponse =
-                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName(),categoryModel.getPrice(),categoryModel.getCondition(),
-                            categoryModel.getBrand(),categoryModel.getModelName(),categoryModel.getFeatures(),categoryModel.getDescription(),
-                            categoryModel.getCreatedBy(),categoryModel.getCreatedOn(),categoryModel.getLastUpdatedBy());
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
+
+
             SubCategoryResponse subCategoryResponse =
-                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),categoryResponse);
+                    new SubCategoryResponse(subCategoryModel.getUuid(),subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
             subCategoryResponses.add(subCategoryResponse);
 
         }
@@ -75,14 +89,23 @@ public class SubCategoryImpl implements SubCategoryService {
         Optional<SubCategoryModel> subCategoryModelOptional = subCategoryRepository.findByUuid(uuid);
 
         if(subCategoryModelOptional.isPresent()){
-            CategoryResponse categoryResponse = null;
+
             SubCategoryModel subCategoryModel = subCategoryModelOptional.get();
 
             subCategoryModel.setSubCategoryName(subCategoryRequest.getSubCategoryName());
 
             subCategoryModel = subCategoryRepository.save(subCategoryModel);
 
-            return new SubCategoryResponse(subCategoryModel.getUuid(), subCategoryModel.getSubCategoryName(),categoryResponse);
+            CategoryModel categoryModel = subCategoryModel.getCategoryModel();
+            ProductModel productModel = subCategoryModel.getProductModel();
+            CategoryResponse categoryResponse =
+                    new CategoryResponse(categoryModel.getUuid(), categoryModel.getCategoryName());
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
+
+            return new SubCategoryResponse(subCategoryModel.getUuid(), subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "SubCategory with uuid: " + uuid + " is not found.");
         }
@@ -108,9 +131,10 @@ public class SubCategoryImpl implements SubCategoryService {
 
         if(subCategoryModelOptional.isPresent()){
             CategoryResponse categoryResponse = null;
+            ProductResponse productResponse = null;
             SubCategoryModel subCategoryModel = subCategoryModelOptional.get();
 
-            return new SubCategoryResponse(subCategoryModel.getUuid(), subCategoryModel.getSubCategoryName(),categoryResponse);
+            return new SubCategoryResponse(subCategoryModel.getUuid(), subCategoryModel.getSubCategoryName(),productResponse,categoryResponse);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with uuid: " + uuid + " is not found.");
         }

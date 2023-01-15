@@ -11,14 +11,5 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CategoryRequest {
     private String categoryName;
-    private Double price;
-    private String condition;
-    private String brand;
-    private String modelName;
-    private String features;
-    private String description;
 
-    private String createBy;
-    private LocalDateTime createdOn;
-    private String lastUpdatedBy;
 }
