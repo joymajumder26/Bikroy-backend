@@ -8,6 +8,7 @@ import com.example.Bikroy.model.ProductModel;
 import com.example.Bikroy.repository.ProductRepository;
 import com.example.Bikroy.service.ProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -113,6 +114,32 @@ public class ProductImpl implements ProductService {
     @Override
     public  List<ProductResponse> filterProducts(Integer pageNo, Integer pageSize, String uuid, String productName){
 
-        return null;
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+
+        ProductModel exampleProduct = new ProductModel();
+        exampleProduct.setProductName(productName);
+        exampleProduct.setUuid(uuid);
+
+        ExampleMatcher matcher = ExampleMatcher.matchingAny()
+                .withMatcher("productName", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
+                .withMatcher("uuid", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+
+        Page<ProductModel> productModelPage = productRepository.findAll(Example.of(exampleProduct, matcher), pageable);
+
+
+
+        List<ProductResponse> productResponses = new ArrayList<>();
+
+        for (ProductModel productModel: productModelPage.getContent()) {
+            ProductResponse productResponse =
+                    new ProductResponse(productModel.getUuid(), productModel.getProductName(),productModel.getPrice(),productModel.getCondition(),
+                            productModel.getBrand(),productModel.getModelName(),productModel.getFeatures(),productModel.getDescription(),
+                            productModel.getCreatedBy(),productModel.getCreatedOn(),productModel.getLastUpdatedBy());
+            productResponses.add(productResponse);
+        }
+
+        return productResponses;
     }
-}
+    }
+
